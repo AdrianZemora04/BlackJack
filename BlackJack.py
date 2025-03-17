@@ -34,36 +34,56 @@ def buton(x, y, width, height, color, text, text_color):
     mesaj(text, text_color, x + 10, y + 10)
 def verificare(px, py, rect_x, rect_y, rect_width, rect_height):
     return rect_x <= px <= rect_x + rect_width and rect_y <= py <= rect_y + rect_height
+def IncepeJocul():
+    screen = pygame.display.set_mode((1000, 600))
+    pygame.display.set_caption("BlackJack")
+
+    running_new = True
+    while running_new:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running_new = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+
+                if verificare(mouse_x, mouse_y, 100, 100, 200, 50):
+                    print("Buton în fereastra nouă apăsat!")
+
+        screen.blit(imagine_fundal, (0, 0))
+
+        # Desenează butoane sau alte elemente în noua fereastră
+        buton(100, 100, 200, 50, GREEN, "Buton Nou", BLACK)
 
 
-#meniu
-running = True
-while running:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            if verificare(mouse_x, mouse_y, 450, 250, 200, 50):
-                print("Butonul Incepeste jocul a fost apasat")
+        pygame.display.flip()
+
+    # Revenire fereastra initiala
+    screen = pygame.display.set_mode((screen_width, screen_height))
+    pygame.display.set_caption("BlackJack")
+def meniu():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x, mouse_y = pygame.mouse.get_pos()
+                if verificare(mouse_x, mouse_y, 450, 250, 200, 50):
+                    IncepeJocul()
 
 
+                elif verificare(mouse_x, mouse_y, 450, 350, 200, 50):
+                    pygame.quit()
+                    sys.exit()
 
-            elif verificare(mouse_x, mouse_y, 450, 350, 200, 50):
-                print("Butonul 2 a fost apăsat!")
+        screen.blit(imagine_fundal, (0, 0))
 
-    screen.blit(imagine_fundal, (0, 0))
+        mesaj("BlackJack", BLACK, 450, 50)
+        mesaj("Alege o opțiune:", BLACK, 400, 190)
+        buton(450, 250, 200, 50, GRAY, "Incepe jocul", BLACK)
+        buton(450, 350, 200, 50, GRAY, "Inchide jocul", BLACK)
 
-
-    mesaj("BlackJack", BLACK, 450, 50)
-    mesaj("Alege o opțiune:", BLACK, 400, 190)
-    buton(450, 250, 200, 50, GRAY, "Incepe jocul", BLACK)
-    buton(450, 350, 200, 50, GRAY, "Buton 2", BLACK)
+        pygame.display.flip()
 
 
-    pygame.display.flip()
-
-#Ieșire
-pygame.quit()
-sys.exit()
-#Iesire
+meniu()
