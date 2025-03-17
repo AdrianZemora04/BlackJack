@@ -22,6 +22,10 @@ RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 # Culori
 
+imagine_fundal = pygame.image.load("imagine.png")
+imagine_fundal = pygame.transform.scale(imagine_fundal, (screen_width, screen_height))
+
+
 def mesaj(text, color, x, y):
     text_surface = font.render(text, True, color)
     screen.blit(text_surface, (x, y))
@@ -41,17 +45,19 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             if verificare(mouse_x, mouse_y, 450, 250, 200, 50):
-                print("Butonul 1 a fost apăsat!")
+                print("Butonul Incepeste jocul a fost apasat")
+
+
+
             elif verificare(mouse_x, mouse_y, 450, 350, 200, 50):
                 print("Butonul 2 a fost apăsat!")
 
-
-    screen.fill(WHITE)
+    screen.blit(imagine_fundal, (0, 0))
 
 
     mesaj("BlackJack", BLACK, 450, 50)
-    mesaj("Alege o opțiune:", BLACK, 450, 150)
-    buton(450, 250, 200, 50, GRAY, "Buton 1", BLACK)
+    mesaj("Alege o opțiune:", BLACK, 400, 190)
+    buton(450, 250, 200, 50, GRAY, "Incepe jocul", BLACK)
     buton(450, 350, 200, 50, GRAY, "Buton 2", BLACK)
 
 
