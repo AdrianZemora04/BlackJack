@@ -46,20 +46,39 @@ def IncepeJocul():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_x, mouse_y = pygame.mouse.get_pos()
 
-                if verificare(mouse_x, mouse_y, 100, 100, 200, 50):
-                    print("Buton în fereastra nouă apăsat!")
+                if verificare(mouse_x, mouse_y, 850, 50, 98, 50):
+                    pygame.quit()
+                    sys.exit()
+                elif verificare(mouse_x, mouse_y, 850, 275, 98, 50):
+                    print("Jocul incepe")
+                elif verificare(mouse_x, mouse_y, 640, 450, 98, 50):
+                    print("HIT")
+                elif verificare(mouse_x, mouse_y, 270, 450, 98, 50):
+                    print("STAND")
+                elif verificare(mouse_x, mouse_y, 445, 450, 98, 50):
+                    print("DOUBLE")
+
+
 
         screen.blit(imagine_fundal, (0, 0))
 
-        # Desenează butoane sau alte elemente în noua fereastră
-        buton(100, 100, 200, 50, GREEN, "Buton Nou", BLACK)
 
+        buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
+        buton(850,275,98,50,GREEN,"START",BLACK)
+        buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
+        buton(270,450,98,50,GRAY,"STAND",BLACK)
+        buton(445,450,120,50,GRAY,"DOUBLE",BLACK)
+        mesaj("DEALER", BLACK, 450, 50)
+        mesaj("CARTILE MELE", BLACK, 415, 500)
 
         pygame.display.flip()
 
     # Revenire fereastra initiala
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("BlackJack")
+
+
+#meniu
 def meniu():
     running = True
     while running:
@@ -80,10 +99,11 @@ def meniu():
 
         mesaj("BlackJack", BLACK, 450, 50)
         mesaj("Alege o opțiune:", BLACK, 400, 190)
-        buton(450, 250, 200, 50, GRAY, "Incepe jocul", BLACK)
-        buton(450, 350, 200, 50, GRAY, "Inchide jocul", BLACK)
+        buton(450, 250, 200, 50, GREEN, "Incepe jocul", BLACK)
+        buton(450, 350, 200, 50, RED, "Inchide jocul", BLACK)
 
         pygame.display.flip()
+
 
 
 meniu()
