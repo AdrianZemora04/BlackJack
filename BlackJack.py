@@ -1,6 +1,6 @@
-import numpy as np
 import pygame
 import sys
+import random
 
 
 pygame.init()
@@ -76,6 +76,25 @@ def IncepeJocul():
     # Revenire fereastra initiala
     screen = pygame.display.set_mode((screen_width, screen_height))
     pygame.display.set_caption("BlackJack")
+def creearePchet():
+    simboluri=['romb','inima rosie','inima neagra','trefla']
+    valori=['2','3','4','5','6','7','8','9','J','Q','K','A']
+    pachet=[f"{valoare}_{simbol}"for valoare in valori for simbol in simboluri]
+    random.shuffle(pachet)
+    return pachet
+def valoareCarti(carte):
+    if carte in ['J','Q','K']:
+        return 10;
+    elif carte=='A':
+        return 11;
+    else:
+        return int(carte)
+def calculeazaScor(mana):
+    scor=0
+    for carte in mana:
+        scor+=valoareCarti(carte)
+    return scor
+
 
 
 #meniu
