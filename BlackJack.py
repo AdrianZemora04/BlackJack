@@ -34,9 +34,90 @@ def buton(x, y, width, height, color, text, text_color):
     mesaj(text, text_color, x + 10, y + 10)
 def verificare(px, py, rect_x, rect_y, rect_width, rect_height):
     return rect_x <= px <= rect_x + rect_width and rect_y <= py <= rect_y + rect_height
+def creearePchet():
+    simboluri = ['inima rosie', 'inima neagra', 'trefla', 'romb']  # Folosește nume complete
+    valori = ['2', '3', '4', '5', '6', '7', '8', '9', 'J', 'Q', 'K', 'A']
+    pachet = [f"{valoare}_of_{simbol}" for valoare in valori for simbol in simboluri]
+    random.shuffle(pachet)
+    return pachet
+def valoareCarti(carte):
+    if carte in ['J','Q','K']:
+        return 10
+    elif carte=='A':
+        return 11
+    else:
+        return int(carte)
+def calculeazaScor(mana):
+    scor = 0
+    for carte in mana:
+        value = carte.split('_of_')[0]
+        scor += valoareCarti(value)
+    return scor
+def deseneazaCarteJucator(x, y, valoare, simbol):
+    pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
+    pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
+
+    culoare = RED if simbol in ['inima rosie', 'romb'] else BLACK
+    mesaj(valoare, culoare, x + 10, y + 10)
+    mesaj(simbol[0].upper(), culoare, x + 10, y + 40)
+def deseneazaCarteDealer(x, y, valoare, simbol):
+    pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
+    pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
+
+    culoare = RED if simbol in ['inima rosie', 'romb'] else BLACK
+    mesaj(valoare, culoare, x + 45, y + 10)
+    mesaj(simbol[0].upper(), culoare, x + 50, y + 50)
+def mana(jucator, dealer):
+    if len(dealer) > 0:
+        valoare, simbol = dealer[0].split('_of_')
+        deseneazaCarteDealer(600, 170, valoare, simbol)
+    if len(dealer) > 1:
+        valoare, simbol = dealer[1].split('_of_')
+        deseneazaCarteDealer(560, 170, valoare, simbol)
+    if len(dealer) > 2:
+        valoare, simbol = dealer[2].split('_of_')
+        deseneazaCarteDealer(520, 170, valoare, simbol)
+    if len(dealer) > 3:
+        valoare, simbol = dealer[3].split('_of_')
+        deseneazaCarteDealer(480, 170, valoare, simbol)
+
+    if len(jucator) > 0:
+        valoare, simbol = jucator[0].split('_of_')
+        deseneazaCarteJucator(340, 330, valoare, simbol)
+    if len(jucator) > 1:
+        valoare, simbol = jucator[1].split('_of_')
+        deseneazaCarteJucator(380, 330, valoare, simbol)
+    if len(jucator) > 2:
+        valoare, simbol = jucator[2].split('_of_')
+        deseneazaCarteJucator(420, 330, valoare, simbol)
+    if len(jucator) > 3:
+        valoare, simbol = jucator[3].split('_of_')
+        deseneazaCarteJucator(460, 330, valoare, simbol)
+    if len(jucator) > 4:
+        valoare, simbol = jucator[4].split('_of_')
+        deseneazaCarteJucator(500, 330, valoare, simbol)
+    if len(jucator) > 5:
+        valoare, simbol = jucator[5].split('_of_')
+        deseneazaCarteJucator(540, 330, valoare, simbol)
+    if len(jucator) > 6:
+        valoare, simbol = jucator[6].split('_of_')
+        deseneazaCarteJucator(580, 330, valoare, simbol)
+    if len(jucator) > 7:
+        valoare, simbol = jucator[7].split('_of_')
+        deseneazaCarteJucator(640, 330, valoare, simbol)
+#meniuJoc
 def IncepeJocul():
     screen = pygame.display.set_mode((1000, 600))
     pygame.display.set_caption("BlackJack")
+
+    pachet = creearePchet()
+    mana_jucator = []
+    mana_dealer = []
+
+    mana_jucator.append(pachet.pop())
+    mana_dealer.append(pachet.pop())
+    mana_jucator.append(pachet.pop())
+    mana_dealer.append(pachet.pop())
 
     running_new = True
     while running_new:
@@ -49,55 +130,112 @@ def IncepeJocul():
                 if verificare(mouse_x, mouse_y, 850, 50, 98, 50):
                     pygame.quit()
                     sys.exit()
-                elif verificare(mouse_x, mouse_y, 850, 275, 98, 50):
-                    print("Jocul incepe")
-                elif verificare(mouse_x, mouse_y, 640, 450, 98, 50):
-                    print("HIT")
-                elif verificare(mouse_x, mouse_y, 270, 450, 98, 50):
-                    print("STAND")
-                elif verificare(mouse_x, mouse_y, 445, 450, 98, 50):
-                    print("DOUBLE")
-
-
+                elif verificare(mouse_x, mouse_y, 640, 450, 98, 50):  # HIT
+                    mana_jucator.append(pachet.pop())
+                    scor_jucator = calculeazaScor(mana_jucator)
+                    #actualizare ecran
+                    screen.blit(imagine_fundal, (0, 0))
+                    buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
+                    buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
+                    buton(270, 450, 98, 50, GRAY, "STAND", BLACK)
+                    buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
+                    mesaj("DEALER", BLACK, 450, 50)
+                    mesaj("CARTILE MELE", BLACK, 415, 500)
+                    mana(mana_jucator, mana_dealer)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    pygame.display.flip()
+                    #
+                    pygame.time.delay(500)
+                    if scor_jucator > 21:
+                        mesaj("Bust! Ai depășit 21.", RED, 400, 300)
+                        pygame.display.flip()
+                        pygame.time.delay(2000)
+                        running_new = False
+                elif verificare(mouse_x, mouse_y, 270, 450, 98, 50):  # STAND
+                    scor_dealer = calculeazaScor(mana_dealer)
+                    while scor_dealer < 17:
+                        mana_dealer.append(pachet.pop())
+                        scor_dealer = calculeazaScor(mana_dealer)
+                        pygame.time.delay(1000)
+                    #actualizare ecran
+                    screen.blit(imagine_fundal, (0, 0))
+                    buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
+                    buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
+                    buton(270, 450, 98, 50, GRAY, "STAND", BLACK)
+                    buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
+                    mesaj("DEALER", BLACK, 450, 50)
+                    mesaj("CARTILE MELE", BLACK, 415, 500)
+                    mana(mana_jucator, mana_dealer)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    pygame.display.flip()
+                    #
+                    pygame.time.delay(500)
+                    scor_jucator = calculeazaScor(mana_jucator)
+                    if scor_dealer > 21 or scor_jucator > scor_dealer:
+                        mesaj("Ai câștigat!", GREEN, 400, 300)
+                    elif scor_jucator == scor_dealer:
+                        mesaj("Egalitate!", GRAY, 400, 300)
+                    else:
+                        mesaj("Dealerul câștigă!", RED, 400, 300)
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    running_new = False
+                elif verificare(mouse_x, mouse_y, 445, 450, 120, 50):  # DOUBLE
+                    mana_jucator.append(pachet.pop())
+                    scor_jucator = calculeazaScor(mana_jucator)
+                    scor_dealer = calculeazaScor(mana_dealer)
+                    # actualizare ecran
+                    screen.blit(imagine_fundal, (0, 0))
+                    buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
+                    buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
+                    buton(270, 450, 98, 50, GRAY, "STAND", BLACK)
+                    buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
+                    mesaj("DEALER", BLACK, 450, 50)
+                    mesaj("CARTILE MELE", BLACK, 415, 500)
+                    mana(mana_jucator, mana_dealer)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
+                    #mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    pygame.display.flip()
+                    #
+                    pygame.time.delay(500)
+                    if scor_jucator > 21:
+                        mesaj("Ai depasit 21! Dealerul castiga!", RED, 400, 300)
+                    else:
+                        scor_jucator = calculeazaScor(mana_dealer)
+                        while scor_dealer < 17:
+                            mana_dealer.append(pachet.pop())
+                            scor_dealer = calculeazaScor(mana_dealer)
+                        pygame.time.delay(10000)
+                        if scor_dealer > 21 or scor_jucator > scor_dealer:
+                            mesaj("Ai câștigat!", GREEN, 400, 300)
+                        elif scor_jucator == scor_dealer:
+                            mesaj("Egalitate!", GRAY, 400, 300)
+                        else:
+                            mesaj("Dealerul câștigă!", RED, 400, 300)
+                    pygame.display.flip()
+                    pygame.time.delay(2000)
+                    running_new = False
 
         screen.blit(imagine_fundal, (0, 0))
 
-
         buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
-        buton(850,275,98,50,GREEN,"START",BLACK)
         buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
-        buton(270,450,98,50,GRAY,"STAND",BLACK)
-        buton(445,450,120,50,GRAY,"DOUBLE",BLACK)
+        buton(270, 450, 98, 50, GRAY, "STAND", BLACK)
+        buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
         mesaj("DEALER", BLACK, 450, 50)
         mesaj("CARTILE MELE", BLACK, 415, 500)
 
+        mana(mana_jucator, mana_dealer)
+        mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
+        mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+
         pygame.display.flip()
 
-    # Revenire fereastra initiala
-    screen = pygame.display.set_mode((screen_width, screen_height))
-    pygame.display.set_caption("BlackJack")
-def creearePchet():
-    simboluri=['romb','inima rosie','inima neagra','trefla']
-    valori=['2','3','4','5','6','7','8','9','J','Q','K','A']
-    pachet=[f"{valoare}_{simbol}"for valoare in valori for simbol in simboluri]
-    random.shuffle(pachet)
-    return pachet
-def valoareCarti(carte):
-    if carte in ['J','Q','K']:
-        return 10;
-    elif carte=='A':
-        return 11;
-    else:
-        return int(carte)
-def calculeazaScor(mana):
-    scor=0
-    for carte in mana:
-        scor+=valoareCarti(carte)
-    return scor
-
-
-
-#meniu
+    pygame.time.delay(500)
+    IncepeJocul()
+#meniu principal
 def meniu():
     running = True
     while running:
