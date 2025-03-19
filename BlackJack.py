@@ -35,7 +35,7 @@ def buton(x, y, width, height, color, text, text_color):
 def verificare(px, py, rect_x, rect_y, rect_width, rect_height):
     return rect_x <= px <= rect_x + rect_width and rect_y <= py <= rect_y + rect_height
 def creearePchet():
-    simboluri = ['inima rosie', 'inima neagra', 'trefla', 'romb']  # Folosește nume complete
+    simboluri = ['♠', '♥', '♦', '♣']  # Folosește nume complete
     valori = ['2', '3', '4', '5', '6', '7', '8', '9', 'J', 'Q', 'K', 'A']
     pachet = [f"{valoare}_of_{simbol}" for valoare in valori for simbol in simboluri]
     random.shuffle(pachet)
@@ -57,29 +57,39 @@ def deseneazaCarteJucator(x, y, valoare, simbol):
     pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
     pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
 
-    culoare = RED if simbol in ['inima rosie', 'romb'] else BLACK
+    culoare = RED if simbol in ['♥', '♦'] else BLACK
     mesaj(valoare, culoare, x + 10, y + 10)
     mesaj(simbol[0].upper(), culoare, x + 10, y + 40)
 def deseneazaCarteDealer(x, y, valoare, simbol):
     pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
     pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
 
-    culoare = RED if simbol in ['inima rosie', 'romb'] else BLACK
+    culoare = RED if simbol in ['♥', '♦'] else BLACK
     mesaj(valoare, culoare, x + 45, y + 10)
     mesaj(simbol[0].upper(), culoare, x + 50, y + 50)
-def mana(jucator, dealer):
+def deseneazaCarteIntorsa(x, y):
+    pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
+    pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
+    mesaj("?", BLACK, x + 25, y + 40)
+def mana(jucator, dealer, carte_dealer=False):
     if len(dealer) > 0:
         valoare, simbol = dealer[0].split('_of_')
         deseneazaCarteDealer(600, 170, valoare, simbol)
     if len(dealer) > 1:
-        valoare, simbol = dealer[1].split('_of_')
-        deseneazaCarteDealer(560, 170, valoare, simbol)
+        if carte_dealer:
+            valoare, simbol = dealer[1].split('_of_')
+            deseneazaCarteDealer(560, 170, valoare, simbol)
+        else:
+            deseneazaCarteIntorsa(560, 170)
     if len(dealer) > 2:
         valoare, simbol = dealer[2].split('_of_')
         deseneazaCarteDealer(520, 170, valoare, simbol)
     if len(dealer) > 3:
         valoare, simbol = dealer[3].split('_of_')
         deseneazaCarteDealer(480, 170, valoare, simbol)
+    if len(dealer) > 4:
+        valoare, simbol = dealer[4].split('_of_')
+        deseneazaCarteDealer(440, 170, valoare, simbol)
 
     if len(jucator) > 0:
         valoare, simbol = jucator[0].split('_of_')
@@ -105,6 +115,7 @@ def mana(jucator, dealer):
     if len(jucator) > 7:
         valoare, simbol = jucator[7].split('_of_')
         deseneazaCarteJucator(640, 330, valoare, simbol)
+
 #meniuJoc
 def IncepeJocul():
     screen = pygame.display.set_mode((1000, 600))
@@ -120,6 +131,8 @@ def IncepeJocul():
     mana_dealer.append(pachet.pop())
 
     running_new = True
+    carte_dealer = False
+
     while running_new:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -141,9 +154,9 @@ def IncepeJocul():
                     buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
-                    mana(mana_jucator, mana_dealer)
+                    mana(mana_jucator, mana_dealer, carte_dealer)
                     mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}", BLACK, 100, 50)
                     pygame.display.flip()
                     #
                     pygame.time.delay(500)
@@ -153,6 +166,7 @@ def IncepeJocul():
                         pygame.time.delay(2000)
                         running_new = False
                 elif verificare(mouse_x, mouse_y, 270, 450, 98, 50):  # STAND
+                    carte_dealer = True
                     scor_dealer = calculeazaScor(mana_dealer)
                     while scor_dealer < 17:
                         mana_dealer.append(pachet.pop())
@@ -166,7 +180,7 @@ def IncepeJocul():
                     buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
-                    mana(mana_jucator, mana_dealer)
+                    mana(mana_jucator, mana_dealer, carte_dealer)
                     mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
                     mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
                     pygame.display.flip()
@@ -194,9 +208,9 @@ def IncepeJocul():
                     buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
-                    mana(mana_jucator, mana_dealer)
+                    mana(mana_jucator, mana_dealer, carte_dealer)
                     mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-                    #mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
                     pygame.display.flip()
                     #
                     pygame.time.delay(500)
@@ -227,14 +241,15 @@ def IncepeJocul():
         mesaj("DEALER", BLACK, 450, 50)
         mesaj("CARTILE MELE", BLACK, 415, 500)
 
-        mana(mana_jucator, mana_dealer)
+        mana(mana_jucator, mana_dealer, carte_dealer)
         mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-        mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+        mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}",BLACK, 100, 50)
 
         pygame.display.flip()
 
     pygame.time.delay(500)
     IncepeJocul()
+
 #meniu principal
 def meniu():
     running = True
