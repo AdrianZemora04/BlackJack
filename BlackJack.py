@@ -49,9 +49,18 @@ def valoareCarti(carte):
         return int(carte)
 def calculeazaScor(mana):
     scor = 0
+    numar_asi = 0
+
     for carte in mana:
         value = carte.split('_of_')[0]
+        if value == 'A':
+            numar_asi += 1
         scor += valoareCarti(value)
+
+    while scor > 21 and numar_asi > 0:
+        scor -= 10
+        numar_asi -= 1
+
     return scor
 def deseneazaCarteJucator(x, y, valoare, simbol):
     pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
@@ -65,8 +74,8 @@ def deseneazaCarteDealer(x, y, valoare, simbol):
     pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
 
     culoare = RED if simbol in ['♥', '♦'] else BLACK
-    mesaj(valoare, culoare, x + 45, y + 10)
-    mesaj(simbol[0].upper(), culoare, x + 50, y + 50)
+    mesaj(valoare, culoare, x + 43, y + 10)
+    mesaj(simbol[0].upper(), culoare, x + 44, y + 40)
 def deseneazaCarteIntorsa(x, y):
     pygame.draw.rect(screen, WHITE, (x, y, 70, 100))
     pygame.draw.rect(screen, BLACK, (x, y, 70, 100), 2)
@@ -155,8 +164,8 @@ def IncepeJocul():
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
                     mana(mana_jucator, mana_dealer, carte_dealer)
-                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 460, 540)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}", BLACK, 420, 90)
                     pygame.display.flip()
                     #
                     pygame.time.delay(500)
@@ -181,8 +190,8 @@ def IncepeJocul():
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
                     mana(mana_jucator, mana_dealer, carte_dealer)
-                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 460, 540)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 420, 90)
                     pygame.display.flip()
                     #
                     pygame.time.delay(500)
@@ -209,8 +218,8 @@ def IncepeJocul():
                     mesaj("DEALER", BLACK, 450, 50)
                     mesaj("CARTILE MELE", BLACK, 415, 500)
                     mana(mana_jucator, mana_dealer, carte_dealer)
-                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 100, 50)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 460, 540)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 420, 90)
                     pygame.display.flip()
                     #
                     pygame.time.delay(500)
@@ -242,8 +251,8 @@ def IncepeJocul():
         mesaj("CARTILE MELE", BLACK, 415, 500)
 
         mana(mana_jucator, mana_dealer, carte_dealer)
-        mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 100, 500)
-        mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}",BLACK, 100, 50)
+        mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 460, 540)
+        mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer[:1]) if not carte_dealer else calculeazaScor(mana_dealer)}",BLACK, 420, 90)
 
         pygame.display.flip()
 
