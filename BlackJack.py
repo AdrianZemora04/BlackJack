@@ -185,6 +185,20 @@ def IncepeJocul():
                         running_new = False
                 elif verificare(mouse_x, mouse_y, 270, 450, 98, 50):  # STAND
                     carte_dealer = True
+                    # actualizare ecran
+                    screen.blit(imagine_fundal, (0, 0))
+                    buton(850, 50, 98, 50, RED, "IESIRE", BLACK)
+                    buton(640, 450, 98, 50, GRAY, "   HIT", BLACK)
+                    buton(270, 450, 98, 50, GRAY, "STAND", BLACK)
+                    buton(445, 450, 120, 50, GRAY, "DOUBLE", BLACK)
+                    mesaj("DEALER", BLACK, 450, 50)
+                    mesaj("CARTILE MELE", BLACK, 415, 500)
+                    mana(mana_jucator, mana_dealer, carte_dealer)
+                    mesaj(f"Scor: {calculeazaScor(mana_jucator)}", BLACK, 460, 540)
+                    mesaj(f"Scor Dealer: {calculeazaScor(mana_dealer)}", BLACK, 420, 90)
+                    pygame.display.flip()
+                    pygame.time.delay(1000)
+                    #
                     scor_dealer = calculeazaScor(mana_dealer)
                     while scor_dealer < 17:
 
@@ -209,10 +223,13 @@ def IncepeJocul():
 
                     scor_jucator = calculeazaScor(mana_jucator)
                     if scor_dealer > 21 or scor_jucator > scor_dealer:
+                        #pygame.time.delay(1000)
                         mesaj("Ai câștigat!", GREEN, 430, 280)
                     elif scor_jucator == scor_dealer:
+                        #pygame.time.delay(1000)
                         mesaj("Egalitate!", GRAY, 430, 280)
                     else:
+                        #pygame.time.delay(1000)
                         mesaj("Dealerul câștigă!", RED, 430, 280)
                     pygame.display.flip()
                     pygame.time.delay(2000)
